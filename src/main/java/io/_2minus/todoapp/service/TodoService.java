@@ -25,8 +25,25 @@ public class TodoService {
         return todoRepository.findById(todoId)
                 .orElseThrow(IllegalArgumentException::new);
     }
-
+    // 일정 전체 조회
     public List<Todo> getTodos() {
         return todoRepository.findAll(Sort.by("createdAt").descending());
     }
+    // 일정 수정
+    public Todo updateTodo(Long todoId, TodoRequestDTO dto) {
+        Todo todo = getTodo(todoId);
+
+        // 비밀번호 검증
+        if(todo.getPassword() != null
+        && !todo.getPassword().equals(dto.getPassword())) {
+            throw new IllegalArgumentException("Passwords don't match");
+        }
+
+        todo.setTitle(dto.getTitle());
+        todo.setContent(dto.getContent());
+        todo.setUserName(dto.getUserName());
+
+        return todoRepository.save(todo);
+    }
+
 }
