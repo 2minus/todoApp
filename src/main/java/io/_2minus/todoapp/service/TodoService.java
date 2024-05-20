@@ -31,13 +31,7 @@ public class TodoService {
     }
     // 일정 수정
     public Todo updateTodo(Long todoId, TodoRequestDTO dto) {
-        Todo todo = getTodo(todoId);
-
-        // 비밀번호 검증
-        if(todo.getPassword() != null
-        && !todo.getPassword().equals(dto.getPassword())) {
-            throw new IllegalArgumentException("Passwords don't match");
-        }
+        Todo todo = checkPWAndGetTodo(todoId, dto.getPassword());
 
         todo.setTitle(dto.getTitle());
         todo.setContent(dto.getContent());
@@ -45,5 +39,19 @@ public class TodoService {
 
         return todoRepository.save(todo);
     }
+    // 일정 삭제
+    public void deleteTodo(Long todoId, String password) {
+        Todo todo = checkPWAndGetTodo(todoId, password);
+        todoRepository.delete(todo);
+    }
 
+    private Todo checkPWAndGetTodo(Long todoId, String password) {
+        Todo todo = getTodo(todoId);
+        // 비밀번호 검증
+        if(todo.getPassword() != null
+                && !todo.getPassword().equals(password)) {
+            throw new IllegalArgumentException("Passwords don't match");
+        }
+        return todo;
+    }
 }
