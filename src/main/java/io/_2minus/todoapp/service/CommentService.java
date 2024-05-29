@@ -1,6 +1,8 @@
 package io._2minus.todoapp.service;
 
+import io._2minus.todoapp.CommonResponse;
 import io._2minus.todoapp.dto.CommentRequestDTO;
+import io._2minus.todoapp.dto.CommentResponseDTO;
 import io._2minus.todoapp.entity.Comment;
 import io._2minus.todoapp.entity.Todo;
 import io._2minus.todoapp.entity.User;
@@ -8,6 +10,7 @@ import io._2minus.todoapp.repository.CommentRepository;
 import io._2minus.todoapp.repository.TodoRepository;
 import io._2minus.todoapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,5 +28,37 @@ public class CommentService {
         commentRepository.save(comment);
         return commentRepository.findById(comment.getCommentId()).orElseThrow(()
         -> new IllegalArgumentException("저장에 오류가 발생했습니다."));
+    }
+
+    public Comment updateComment(Long todoId, User user, Long commentId, CommentRequestDTO dto) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()->
+                new NullPointerException("존재하지 않는 댓글입니다."));
+
+        if (comment.getTodo().getTodoId() != todoId) {
+            throw new IllegalArgumentException("잘못된 접근입니다.");
+        }
+
+        if (!comment.getUser().equals(user)) {
+            throw new IllegalArgumentException("수정 권한이 없습니다.");
+        }
+
+        comment.setContent(dto.getContent());
+        return commentRepository.save(comment);
+
+    }
+
+    public void deleteComment(Long todoId, User user, Long commentId, CommentRequestDTO dto) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()->
+                new NullPointerException("존재하지 않는 댓글입니다."));
+
+        if (comment.getTodo().getTodoId() != todoId) {
+            throw new IllegalArgumentException("잘못된 접근입니다.");
+        }
+
+        if (!comment.getUser().equals(user)) {
+            throw new IllegalArgumentException("수정 권한이 없습니다.");
+        }
+
+        commentRepository.delete(comment);
     }
 }
