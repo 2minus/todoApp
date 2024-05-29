@@ -1,7 +1,7 @@
-package io._2minus.todoapp.controller;
+package io._2minus.todoapp.dto;
 
 
-import io._2minus.todoapp.repository.Todo;
+import io._2minus.todoapp.entity.Todo;
 import lombok.Getter;
 import lombok.Setter;
 

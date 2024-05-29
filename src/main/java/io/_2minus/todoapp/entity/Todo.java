@@ -1,4 +1,4 @@
-package io._2minus.todoapp.repository;
+package io._2minus.todoapp.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;

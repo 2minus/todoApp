@@ -1,8 +1,8 @@
 package io._2minus.todoapp.service;
 
 
-import io._2minus.todoapp.controller.TodoRequestDTO;
-import io._2minus.todoapp.repository.Todo;
+import io._2minus.todoapp.dto.TodoRequestDTO;
+import io._2minus.todoapp.entity.Todo;
 import io._2minus.todoapp.repository.TodoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;

@@ -2,16 +2,16 @@ package io._2minus.todoapp.controller;
 
 
 import io._2minus.todoapp.CommonResponse;
-import io._2minus.todoapp.repository.Todo;
+import io._2minus.todoapp.dto.TodoRequestDTO;
+import io._2minus.todoapp.dto.TodoResponseDTO;
+import io._2minus.todoapp.entity.Todo;
 import io._2minus.todoapp.service.TodoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequestMapping("/v1.0/todo")
 @RestController
