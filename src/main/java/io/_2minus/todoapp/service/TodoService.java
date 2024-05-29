@@ -29,6 +29,7 @@ public class TodoService {
     public List<Todo> getTodos() {
         return todoRepository.findAll(Sort.by("createdAt").descending());
     }
+
     // 일정 수정
     public Todo updateTodo(Long todoId, TodoRequestDTO dto) {
         Todo todo = checkPWAndGetTodo(todoId, dto.getPassword());
