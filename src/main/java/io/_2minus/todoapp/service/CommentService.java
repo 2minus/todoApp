@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final TodoRepository todoRepository;
-    private final UserRepository userRepository;
 
     public Comment createComment(Long todoId, User user, CommentRequestDTO dto) {
 
@@ -23,6 +22,8 @@ public class CommentService {
                  new NullPointerException("잘못된 접근입니다."));
 
         var comment = dto.toEntity(user, todo);
-        return commentRepository.save(comment);
+        commentRepository.save(comment);
+        return commentRepository.findById(comment.getCommentId()).orElseThrow(()
+        -> new IllegalArgumentException("저장에 오류가 발생했습니다."));
     }
 }
