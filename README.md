@@ -2,8 +2,14 @@
 회원가입, 로그인 기능이 있는 투두앱 백엔드 서버 만들기
 
 ## ERD
-![](src/main/resources/static/images/ERD_before.png)
-- 전에 구현했던 ERD, user 테이블이 있지만 다이어그램 상에서만 존재.
+### 수정된 ERD
+![](src/main/resources/static/images/ERD_todoAPP.png)
+
+## API 명세서
+![img.png](src/main/resources/static/images/todoAPI_1.png)
+![img_1.png](src/main/resources/static/images/todoAPI_2.png)
+![img_2.png](src/main/resources/static/images/todoAPI_3.png)
+
 
 ## 1단계 : 일정과 댓글의 연관관계
 ### 설명
@@ -23,9 +29,6 @@
 |  일정 아이디   |  bigint   |
 |   작성일자    | timestamp |
 
-
-![](src/main/resources/static/images/ERD.png)
-comment 테이블까지 추가된 ERD
 - User
   - 하나의 user는 todo를 여러개 작성할 수 있으므로 OneToMany
   - 하나의 user는 comment를 여러개 작성 할 수 있으므로 OneToMany
@@ -59,8 +62,6 @@ User 테이블이 생기면서 기존 Todo에 존재하는 password field가 중
 | <span style="color:red">비밀번호</span> | <span style="color:red">varchar</span> |
 |             생성일             |   timestamp    |
 
-### 수정된 ERD
-![](src/main/resources/static/images/ERD_todoAPP.png)
 
 ## 2단계 : 댓글 등록
 ### 기능
@@ -72,7 +73,7 @@ User 테이블이 생기면서 기존 Todo에 존재하는 password field가 중
 - 선택한 일정이 DB에 저장되어 있어야 합니다.
 - 댓글을 식별하는 `고유번호`, `댓글 내용`, 댓글을 작성한 `사용자 아이디`, 댓글이 작성된 `일정 아이디`, `작성일자`를 저장할 수 있습니다.
 
-![img.png](src/main/resources/static/images/img.png)
+![img.png](src/main/resources/static/images/createComment.png)
 
 ### ⚠️ 예외 처리
 
@@ -112,7 +113,7 @@ commentRepository.save(comment);
 - `댓글 내용`만 수정 가능합니다.
 - 선택한 일정과 댓글이 DB에 저장되어 있어야 합니다.
 
-![img_1.png](src/main/resources/static/images/img_1.png)
+![img_1.png](src/main/resources/static/images/updateComment.png)
 
 ### ⚠️ 예외 처리
 
@@ -132,7 +133,7 @@ commentRepository.save(comment);
 - 성공했다는 메시지와 상태 코드 반환하기
 - 선택한 일정과 댓글이 DB에 저장되어 있어야 합니다.
 
-![img_2.png](src/main/resources/static/images/img_2.png)
+![img_2.png](src/main/resources/static/images/deleteComment.png)
 
 ### ⚠️ 예외 처리
 
@@ -173,10 +174,22 @@ commentRepository.save(comment);
 ### 조건
 
 - 패스워드 암호화는 하지 않습니다.
+  - `PasswordEncoder()` 사용할 필요없음
 - `username`은  `최소 4자 이상, 10자 이하이며 알파벳 소문자(a~z), 숫자(0~9)`로 구성되어야 한다.
 - `password`는  `최소 8자 이상, 15자 이하이며 알파벳 대소문자(a~z, A~Z), 숫자(0~9)`로 구성되어야 한다.
+```java
+// 정규식을 이용한 제약조건
+    @NotBlank
+    @Pattern(regexp = "^[a-z0-9]{4,10}$")
+    private String username;
+
+    @NotBlank
+    @Pattern(regexp = "^[A-Za-z0-9]{8,15}$")
+    private String password;
+```
 - DB에 중복된 `username`이 없다면 회원을 저장하고 Client 로 성공했다는 메시지, 상태코드 반환하기
 
+![img.png](src/main/resources/static/images/signup.png)
 ## 7️⃣단계 - 로그인
 
 -
@@ -211,4 +224,4 @@ commentRepository.save(comment);
 - 패스워드 복호화는 하지 않습니다.
 - 로그인 성공 시 로그인에 성공한 유저의 정보와 JWT를 활용하여 토큰을 발급한다.
 - 발급한 토큰을 `Header`에 추가하고 성공했다는 메시지 및 상태코드와 함께 client에 반환한다.
-
+![img.png](src/main/resources/static/images/login.png)

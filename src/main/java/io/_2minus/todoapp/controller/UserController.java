@@ -1,5 +1,6 @@
 package io._2minus.todoapp.controller;
 
+import io._2minus.todoapp.dto.LoginRequestDTO;
 import io._2minus.todoapp.dto.SignupRequestDTO;
 import io._2minus.todoapp.dto.UserInfoDTO;
 import io._2minus.todoapp.entity.UserRoleEnum;
@@ -38,6 +39,11 @@ public class UserController {
         }
 
         userService.signup(dto);
+    }
+
+    @PostMapping("/user/login")
+    public void login(@Valid LoginRequestDTO dto) {
+
     }
 
     @GetMapping("/user-info")
