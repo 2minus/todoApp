@@ -24,12 +24,12 @@ public class UserService {
 
         Optional<User> checkUsername = userRepository.findByUsername(username);
         if (checkUsername.isPresent()) {
-            throw new IllegalStateException("이미 존재하는 ID 입니다.");
+            throw new IllegalStateException(username + "은 중복된 username 입니다.");
         }
 
         Optional<User> checkNickname = userRepository.findByNickname(nickname);
         if (checkNickname.isPresent()) {
-            throw new IllegalStateException("이미 존재하는 별명 입니다.");
+            throw new IllegalStateException(nickname + "은 중복된 nickname 입니다.");
         }
 
         UserRoleEnum role = UserRoleEnum.USER;

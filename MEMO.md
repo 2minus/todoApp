@@ -28,3 +28,14 @@ comment 테이블까지 추가된 ERD
 - comment
   - 여러개의 comment가 하나의 user에 의해 작성되므로 ManyToOne 
   - 여러개의 comment가 하나의 todo에 의해 작성되므로 ManyToOne
+
+### 수정되는 entity : user
+|  사용자 필드   |  데이터 유형   |
+|:---------:|:---------:|
+| 아이디(고유번호) |  bigint   |
+|    별명     |  varchar  |
+|  사용자 이름   |  varchar  |
+|   비밀번호    |  varchar  |
+|    권한     |  varchar  |
+|    생성일    | timestamp |
+
