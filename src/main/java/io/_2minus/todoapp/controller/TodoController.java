@@ -5,10 +5,12 @@ import io._2minus.todoapp.CommonResponse;
 import io._2minus.todoapp.dto.TodoRequestDTO;
 import io._2minus.todoapp.dto.TodoResponseDTO;
 import io._2minus.todoapp.entity.Todo;
+import io._2minus.todoapp.security.UserDetailsImpl;
 import io._2minus.todoapp.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +23,8 @@ public class TodoController {
     public final TodoService todoService;
 
     @PostMapping
-    public ResponseEntity<CommonResponse<TodoResponseDTO>> postTodo(@RequestBody TodoRequestDTO dto) {
-        Todo todo = todoService.createTodo(dto);
+    public ResponseEntity<CommonResponse<TodoResponseDTO>> postTodo(@RequestBody TodoRequestDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Todo todo = todoService.createTodo(dto, userDetails.getUser());
         TodoResponseDTO response = new TodoResponseDTO(todo);
         return ResponseEntity.ok().body(CommonResponse.<TodoResponseDTO>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -56,8 +58,8 @@ public class TodoController {
     }
 
     @PutMapping("/{todoId}")
-    public  ResponseEntity<CommonResponse<TodoResponseDTO>> putTodo(@PathVariable Long todoId, @RequestBody TodoRequestDTO dto) {
-        Todo todo = todoService.updateTodo(todoId, dto);
+    public  ResponseEntity<CommonResponse<TodoResponseDTO>> putTodo(@PathVariable Long todoId, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody TodoRequestDTO dto) {
+        Todo todo = todoService.updateTodo(todoId, userDetails.getUser(), dto);
         TodoResponseDTO response = new TodoResponseDTO(todo);
         return ResponseEntity.ok().body(CommonResponse.<TodoResponseDTO>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -67,8 +69,8 @@ public class TodoController {
     }
 
     @DeleteMapping("/{todoId}")
-    public ResponseEntity<CommonResponse> deleteTodo(@PathVariable Long todoId, @RequestBody TodoRequestDTO dto) {
-        todoService.deleteTodo(todoId,dto.getPassword());
+    public ResponseEntity<CommonResponse> deleteTodo(@PathVariable Long todoId, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody TodoRequestDTO dto) {
+        todoService.deleteTodo(todoId, userDetails.getUser());
         return ResponseEntity.ok().body(CommonResponse.<TodoResponseDTO>builder()
                 .statusCode(HttpStatus.OK.value())
                 .msg("삭제가 완료되었습니다.")

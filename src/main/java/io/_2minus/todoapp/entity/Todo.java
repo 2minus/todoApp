@@ -28,18 +28,15 @@ public class Todo extends Timestamped {
     @Column(nullable = false)
     private String userName;
 
-    @Column(nullable = false)
-    private String password;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Builder
-    public Todo(String title, String content, String userName, String password) {
+    public Todo(User user, String title, String content, String userName) {
+        this.user = user;
         this.title = title;
         this.content = content;
         this.userName = userName;
-        this.password = password;
     }
 }

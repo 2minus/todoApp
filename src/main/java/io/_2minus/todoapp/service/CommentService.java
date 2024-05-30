@@ -12,6 +12,7 @@ import io._2minus.todoapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,24 +31,21 @@ public class CommentService {
         -> new IllegalArgumentException("저장에 오류가 발생했습니다."));
     }
 
+    @Transactional
     public Comment updateComment(Long todoId, User user, Long commentId, CommentRequestDTO dto) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(()->
-                new NullPointerException("존재하지 않는 댓글입니다."));
-
-        if (comment.getTodo().getTodoId() != todoId) {
-            throw new IllegalArgumentException("잘못된 접근입니다.");
-        }
-
-        if (!comment.getUser().equals(user)) {
-            throw new IllegalArgumentException("수정 권한이 없습니다.");
-        }
-
+        Comment comment = checkUserAndGetComment(todoId, user, commentId);
         comment.setContent(dto.getContent());
         return commentRepository.save(comment);
 
     }
 
-    public void deleteComment(Long todoId, User user, Long commentId, CommentRequestDTO dto) {
+    public void deleteComment(Long todoId, User user, Long commentId) {
+        Comment comment = checkUserAndGetComment(todoId, user, commentId);
+        commentRepository.delete(comment);
+    }
+
+
+    public Comment checkUserAndGetComment (Long todoId, User user, Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(()->
                 new NullPointerException("존재하지 않는 댓글입니다."));
 
@@ -59,6 +57,6 @@ public class CommentService {
             throw new IllegalArgumentException("수정 권한이 없습니다.");
         }
 
-        commentRepository.delete(comment);
+        return comment;
     }
 }

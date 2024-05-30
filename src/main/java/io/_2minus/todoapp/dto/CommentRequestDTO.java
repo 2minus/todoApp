@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CommentRequestDTO {
 
-    private User user;
-    private Todo todo;
+//    private User user;
+//    private Todo todo;
     @NotBlank
     private String content;
 
